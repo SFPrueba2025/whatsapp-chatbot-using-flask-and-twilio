@@ -3,9 +3,11 @@ from config import Config
 import os
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 app.config.from_object(Config)
+bootstrap = Bootstrap(app)
 
 
 def start_ngrok():

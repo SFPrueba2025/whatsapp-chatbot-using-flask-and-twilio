@@ -1,15 +1,19 @@
-# WhatApp Chatbot Using Flask and Twilio
+# WhatsApp Chatbot Using Flask and Twilio
 
 ### Overview
-A chatbot is a computer program designed to simulate conversation through voice commands or text chats (or both) with human users, especially over the internet. The level of intelligence among chatbots vary intensely, some (like the one used here) are very basic, while others can be very sophisticated by employing machine learning algorithms and artificial intelligence in order to attain near human-level conversation.
+A chatbot is a computer program designed to simulate conversation through voice commands or text chats (or both) with human users, especially over the internet. The level of intelligence among chatbots vary immensely, some (like the one used here) are very basic, while others can be very sophisticated by employing machine learning algorithms and artificial intelligence in order to attain near human-level conversation.
 
 This application makes use of the [Flask](https://flask.palletsprojects.com/en/1.1.x/) framework and [Twilio API for WhatsApp](https://www.twilio.com/whatsapp) while working with Python.
+
+To use it, ensure you have an active phone number and WhatsApp installed in your smartphone. Create an account with Twilio then register your smartphone with your account(see technical details for more info). You will need to send the code given for your smartphone as a message to the number provided in your account.
 
 ### Tools Used
 * Python for programming
 * Flask web framework
 * Twilio API for WhatsApp
 * Ngrok for temporary provision of Twilio URL
+* Quatable API
+* Cat as a Service API
 
 ### Features
 * Real-time automated WhatsApp responses
@@ -27,7 +31,7 @@ To successfully test this application, there are two requirements you will need:
 * A smartphone with WhatsApp installed, with an active phone number
 * A Twilio Account. You can create [a free Twilio account now](https://www.twilio.com/try-twilio?promo=7fB3Je).
 
-Additionally, if you do not want to create your own project but would prefer to use this project, you will need to do the following:
+If you do not want to create your own project but would prefer to use this project, you will need to do the following:
 
 1. Clone this repo:
 

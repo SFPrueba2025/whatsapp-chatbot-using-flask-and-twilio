@@ -1,7 +1,13 @@
 from app import app
-from flask import request
+from flask import request, render_template, url_for
 from twilio.twiml.messaging_response import MessagingResponse
 import requests
+
+
+@app.route('/')
+@app.route('/home')
+def home():
+    return render_template('home.html', title='Home')
 
 
 @app.route('/bot', methods=['POST'])

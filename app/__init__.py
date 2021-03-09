@@ -2,7 +2,7 @@ from flask import Flask
 from config import Config
 import os
 import logging
-from logging.handlers import SMTPHandler, RotatingFileHandler
+from logging.handlers import RotatingFileHandler
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
@@ -20,7 +20,7 @@ def start_ngrok():
 if app.config.get("ENV") == "development" and app.config["START_NGROK"]:
     start_ngrok()
 
-if not app.debug:    
+if not app.debug:
     if app.config['LOG_TO_STDOUT']:
         stream_handler = logging.StreamHandler()
         stream_handler.setLevel(logging.INFO)

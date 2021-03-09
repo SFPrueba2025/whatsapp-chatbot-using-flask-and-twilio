@@ -1,13 +1,13 @@
 from app import app
 from flask import request
-from twilio.twiml.message_response import MessageResponse
+from twilio.twiml.messaging_response import MessagingResponse
 import requests
 
 
 @app.route('/bot', methods=['POST'])
 def bot():
     incoming_msg = request.values.get('Body', '').lower()
-    resp = MessageResponse()
+    resp = MessagingResponse()
     msg = resp.message()
     responded = False
     if 'quote' in incoming_msg:

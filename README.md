@@ -7,6 +7,8 @@ This application makes use of the [Flask](https://flask.palletsprojects.com/en/1
 
 To use it, ensure you have an active phone number and WhatsApp installed in your smartphone. Create an account with Twilio then register your smartphone with your account(see technical details for more info). You will need to send the code given for your smartphone as a message to the number provided in your account.
 
+![WhatsApp Chatbot](app/static/images/whatsapp_chatbot.gif)
+
 ### Tools Used
 * Python for programming
 * Flask web framework

@@ -31,7 +31,7 @@ To use it, ensure you have an active phone number and WhatsApp installed in your
 
 To successfully test this application, there are two requirements you will need:
 * A smartphone with WhatsApp installed, with an active phone number
-* A Twilio Account. You can create a [free Twilio account now](www.twilio.com/referral/WNPWrR).
+* A Twilio Account. You can create a [free Twilio account now](https://www.twilio.com/try-twilio?promo=WNPWrR).
 
 If you do not want to create your own project but would prefer to use this project, you will need to do the following:
 

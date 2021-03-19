@@ -40,18 +40,43 @@ If you do not want to create your own project but would prefer to use this proje
 ```python
 $ git clone git@github.com:GitauHarrison/whatsapp-chatbot-using-flask-and-twilio.git
 ```
-2. Create and activate your virtual environment:
+
+2. Move into the cloned directory:
+
+```python
+$ cd whatsapp-chatbot-using-flask-and-twilio
+```
+
+3. Create and activate your virtual environment:
 
 ```python
 $ mkvirtualenv whatsapp-chatbot
 ```
 
-3. Install useful dependencies
+4. Install used dependencies
 
 ```python
 (whatsapp-chatbot)$ pip3 install -r requirements.txt
 ```
-4. Run the application:
+
+5. Before you can run your server, remember to create a `.env` file following the guidance seen in the `.env.template`. Create a `.env` file in the root directory:
+
+```python
+(whatsapp-chatbot)$ touch .env
+```
+
+6. Update the `.env` file with all the necessary details.
+
+```python
+MAIL_SERVER=
+MAIL_PORT=
+MAIL_USE_TLS=
+MAIL_USERNAME=
+MAIL_PASSWORD=
+ADMINS=
+```
+
+7. Run the application:
 
 ```python
 (whatsapp-chatbot)$ flask run
@@ -59,9 +84,9 @@ $ mkvirtualenv whatsapp-chatbot
 
 Once your application is running, you can access your localhost on http://127.0.0.1:5000/. Additionally, if you look carefully in your terminal, you will see * Tunnel URL: NgrokTunnel: "https://4209c9af6d43.ngrok.io" -> "http://localhost:5000"
 
-The HTTP value may be different from the one shown here because I am using the free tier package of ngrok. 
+The HTTP value may be different from the one shown here because I am using the free tier package of `ngrok`.
 
-5. Ensure you are still logged in to your Twilio Account: 
+8. Ensure you are still logged in to your Twilio Account: 
 
     - Go back to the [Twilio Console](https://www.twilio.com/console), 
 

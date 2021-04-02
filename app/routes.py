@@ -43,8 +43,6 @@ def create_map():
 
     return m._repr_html_()
 
-    return m._repr_html_()
-
 
 @app.route('/')
 @app.route('/home')

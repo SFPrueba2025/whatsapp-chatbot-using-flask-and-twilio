@@ -99,7 +99,7 @@ The HTTP value may be different from the one shown here because I am using the f
     - Be certain to set your request method to `HTTP POST`.
 
     - Click the Save button to apply your changes
-    - From [Try Whatsapp](https://www.twilio.com/console/sms/whatsapp/learn), you will see a code assigned to you. This code begins witht the word `join-`. You will need to use this code to start sending and receiving messages.
+    - From _Try It Out/_[Try Whatsapp](https://www.twilio.com/console/sms/whatsapp/learn), you will see a code assigned to you. This code begins with the word `join-`. You will need to use this code to start sending and receiving messages.
 
 From your smartphone, or the WhatsApp Web App, you can try sending messages with sentences including the words 'cat' and 'quote'. Also, try excluding those words.
 
@@ -107,6 +107,8 @@ From your smartphone, or the WhatsApp Web App, you can try sending messages with
 
 * Add the phone number +1 415 523 8886  to your contact list.
 * Send the code `join-<code>` to the number above. If you have WhatsApp installed, you can [click here](http://wa.me/+14155238886?text=join%20who-smoke).
+
+You can invite your friends to your Sandbox. Ask them to send a WhatsApp Message to the number above with the code shown.
 
 ### References
 

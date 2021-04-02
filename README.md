@@ -27,7 +27,7 @@ To use it, ensure you have an active phone number and WhatsApp installed in your
 ### Deployed Application
 * [Simple WhatsApp Chatbot](https://simple-whatsapp-chatbot.herokuapp.com/)
 
-### Testing
+### Testing Locally
 
 To successfully test this application, there are two requirements you will need:
 * A smartphone with WhatsApp installed, with an active phone number
@@ -103,7 +103,7 @@ The HTTP value may be different from the one shown here because I am using the f
 
 From your smartphone, or the WhatsApp Web App, you can try sending messages with sentences including the words 'cat' and 'quote'. Also, try excluding those words.
 
-### How to setup your phone to start sending and receiving messages
+### Start Sending and Receiving Messages
 
 * Add the phone number +1 415 523 8886  to your contact list.
 * Send the code `join-<code>` to the number above. If you have WhatsApp installed, you can [click here](http://wa.me/+14155238886?text=join%20who-smoke).

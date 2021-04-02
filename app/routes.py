@@ -67,10 +67,10 @@ def bot():
             quote = 'I could not retrieve a quote at this time, sorry.'
         msg.body(quote)
         responded = True
-    elif 'cat' in incoming_msg:
+    if 'cat' in incoming_msg:
         msg.media('https://cataas.com/cat')
         responded = True
-    elif 'Latitude' in request.values.get() and "Longitude" in request.values.keys():
+    if 'Latitude' in request.values.get() and "Longitude" in request.values.keys():
         lat = request.values.get('Latitude')
         lon = request.values.get('Longitude')
 

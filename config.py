@@ -17,4 +17,3 @@ class Config(object):
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = ['your-email@example.com']
-    TOMTOM_API_KEY = os.environ.get('TOMTOM_API_KEY')

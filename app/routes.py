@@ -4,7 +4,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 import openai
 import os
 
-# Configura la clave de API de OpenAI
+# Usa tu clave API de OpenAI desde las variables de entorno
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route('/')
@@ -12,16 +12,15 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 def home():
     return render_template('home.html', title='Home')
 
-
 @app.route('/bot', methods=['POST'])
 def bot():
     incoming_msg = request.values.get('Body', '').strip()
     resp = MessagingResponse()
     msg = resp.message()
     responded = False
-    
-    # Respuesta fija para 'quote' (mantener si quieres esa opción)
-    if 'quote' in incoming_msg:
+
+    # Respuesta para 'quote'
+    if 'quote' in incoming_msg.lower():
         r = requests.get('https://api.quotable.io/random')
         if r.status_code == 200:
             data = r.json()
@@ -31,24 +30,24 @@ def bot():
         msg.body(quote)
         responded = True
 
-    # Respuesta fija para 'cat' (mantener si quieres esa opción)
-    elif 'cat' in incoming_msg:
+    # Respuesta para 'cat'
+    elif 'cat' in incoming_msg.lower():
         msg.media('https://cataas.com/cat')
         responded = True
 
-    # Si no se entiende el mensaje, se usa OpenAI
+    # Si no coincide con 'quote' o 'cat', responde con GPT
     if not responded:
         try:
-            # Solicita una respuesta a OpenAI
-            response = openai.Completion.create(
-                model="text-davinci-003",  # O usa otro modelo que prefieras
-                prompt=incoming_msg,
-                max_tokens=150,
-                temperature=0.7
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": incoming_msg}
+                ]
             )
-            reply = response.choices[0].text.strip()
+            reply = response['choices'][0]['message']['content'].strip()
             msg.body(reply)
         except Exception as e:
-            msg.body(f"Sorry, I encountered an error: {str(e)}")
-    
+            msg.body(f"Sorry, an error occurred: {str(e)}")
+
     return str(resp)

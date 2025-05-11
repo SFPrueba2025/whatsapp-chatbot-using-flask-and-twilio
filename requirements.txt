@@ -1,3 +1,4 @@
+cython>=0.29.33
 branca==0.4.2
 certifi==2020.12.5
 chardet==4.0.0

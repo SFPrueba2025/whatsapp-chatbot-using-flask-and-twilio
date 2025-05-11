@@ -3,6 +3,7 @@ from flask import request, render_template
 from twilio.twiml.messaging_response import MessagingResponse
 import openai
 import os
+import requests
 
 # Usa tu clave API de OpenAI desde las variables de entorno
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -38,7 +39,8 @@ def bot():
     # Si no coincide con 'quote' o 'cat', responde con GPT
     if not responded:
         try:
-            response = openai.ChatCompletion.create(
+            # Actualización de la llamada a la API
+            response = openai.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant."},

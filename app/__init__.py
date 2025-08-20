@@ -59,4 +59,6 @@ if not app.debug and not app.testing:
         app.logger.setLevel(logging.INFO)
         app.logger.info('WhatsApp Chatbot Failure')
 
+
+# Importar routes después de inicializar app
 from app import routes

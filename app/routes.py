@@ -3,15 +3,27 @@ from flask import request, render_template
 from twilio.twiml.messaging_response import MessagingResponse
 import os
 import requests
-from openai import OpenAI
+import google.generativeai as genai
 
-# Inicializar cliente OpenAI
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Configurar Gemini con tu API Key desde variables de entorno
+genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+
+# Función para responder con Gemini
+def chat_with_gemini(message: str) -> str:
+    try:
+        response = model.generate_content(message)
+        return response.text
+    except Exception as e:
+        return f"Sorry, an error occurred: {str(e)}"
+
 
 @app.route('/')
 @app.route('/home')
 def home():
     return render_template('home.html', title='Home')
+
 
 @app.route('/bot', methods=['POST'])
 def bot():
@@ -36,19 +48,9 @@ def bot():
         msg.media('https://cataas.com/cat')
         responded = True
 
-    # Si no coincide con 'quote' o 'cat', responde con GPT
+    # Si no coincide con 'quote' o 'cat', responde con Gemini
     if not responded:
-        try:
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": incoming_msg}
-                ]
-            )
-            reply = response.choices[0].message.content.strip()
-            msg.body(reply)
-        except Exception as e:
-            msg.body(f"Sorry, an error occurred: {str(e)}")
+        reply = chat_with_gemini(incoming_msg)
+        msg.body(reply)
 
     return str(resp)

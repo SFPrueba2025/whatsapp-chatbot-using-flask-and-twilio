@@ -40,7 +40,6 @@ except Exception as e:
 # --- Funciones de Lógica ---
 def get_message_body(data: dict) -> str:
     """Extrae el texto del mensaje del diccionario de datos de Twilio."""
-    # Twilio a veces usa 'Body' y otras 'ButtonText'
     return data.get("Body", "") or data.get("ButtonText", "")
 
 def chat_with_gemini(message: str) -> str:
@@ -67,6 +66,10 @@ def process_and_reply(data: dict):
     
     reply_text = chat_with_gemini(incoming_msg)
     
+    # NUEVA LÓGICA: Acortar el mensaje si es demasiado largo
+    if len(reply_text) > 1590:
+        reply_text = reply_text[:1590] + "\n\n[Respuesta acortada por límite de caracteres]"
+
     if twilio_client and from_number:
         try:
             twilio_client.messages.create(

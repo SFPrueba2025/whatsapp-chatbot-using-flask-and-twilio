@@ -1,8 +1,5 @@
-Herramientas de construcción para Render
 setuptools
 wheel
-
-Librerías principales de la aplicación
 Flask==2.2.5
 twilio==8.10.0
 google-generativeai==0.7.2

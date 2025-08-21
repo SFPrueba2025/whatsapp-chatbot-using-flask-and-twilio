@@ -1,6 +1,7 @@
 import os
 import logging
 import threading
+import json
 from flask import Flask, request, Response
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
@@ -44,8 +45,7 @@ def chat_with_gemini(message: str) -> str:
     if not model:
         return "Error: El modelo de IA no está disponible."
     if not message.strip():
-        # Esta es la respuesta que estás recibiendo ahora
-        return "Por favor, envíame una pregunta o algo de contexto. Necesito algo para poder responder."
+        return "Por favor, envíame una pregunta o algo de contexto para poder responder."
     try:
         response = model.generate_content(message)
         return response.text
@@ -53,25 +53,35 @@ def chat_with_gemini(message: str) -> str:
         logging.error(f"❌ Error al generar contenido con Gemini: {e}")
         return "Lo siento, ocurrió un error al procesar tu mensaje."
 
-def process_and_reply(incoming_msg: str, from_number: str):
+def process_and_reply(incoming_msg: str, from_number: str, debug_data: str):
     """
-    Función que se ejecuta en segundo plano para procesar con Gemini
-    y enviar la respuesta final a través de la API REST de Twilio.
+    Función en segundo plano que procesa con Gemini y envía la respuesta
+    final, además de un mensaje de depuración.
     """
     logging.info(f"Procesando en segundo plano para {from_number}...")
     
-    # 1. Obtener la respuesta de Gemini (la parte lenta)
+    # 1. Obtener la respuesta de Gemini
     reply_text = chat_with_gemini(incoming_msg)
     
-    # 2. Enviar la respuesta final como un nuevo mensaje
+    # 2. Enviar la respuesta final y el mensaje de depuración
     if twilio_client:
         try:
+            # Mensaje con la respuesta de Gemini
             twilio_client.messages.create(
                 body=reply_text,
                 from_=TWILIO_WHATSAPP_NUMBER,
                 to=from_number
             )
-            logging.info(f"Respuesta final enviada a {from_number}: {reply_text}")
+            logging.info(f"Respuesta de Gemini enviada a {from_number}")
+
+            # Mensaje de depuración con los datos de Twilio
+            twilio_client.messages.create(
+                body=f"DEBUG DATA:\n{debug_data}",
+                from_=TWILIO_WHATSAPP_NUMBER,
+                to=from_number
+            )
+            logging.info(f"Mensaje de depuración enviado a {from_number}")
+
         except Exception as e:
             logging.error(f"❌ Error enviando mensaje con la API de Twilio: {e}")
 
@@ -80,28 +90,25 @@ def process_and_reply(incoming_msg: str, from_number: str):
 @app.route("/bot", methods=["POST"])
 def whatsapp_webhook():
     """
-    Recibe el mensaje de Twilio, responde inmediatamente
-    y lanza el procesamiento de Gemini en segundo plano.
+    Recibe el mensaje de Twilio, responde inmediatamente y lanza el
+    procesamiento en segundo plano.
     """
-    # ====================================================================
-    # LÍNEA DE DIAGNÓSTICO CAMBIADA A ERROR PARA FORZAR SU APARICIÓN
-    logging.error(f"Datos completos recibidos de Twilio: {request.values.to_dict()}")
-    # ====================================================================
+    # Capturamos todos los datos recibidos para depuración
+    all_data = request.values.to_dict()
+    debug_string = json.dumps(all_data, indent=2) # Lo formateamos para que sea legible
 
     incoming_msg = request.values.get("Body", "").strip()
-    from_number = request.values.get("From", "") # Número del usuario
+    from_number = request.values.get("From", "")
     
-    logging.info(f"Mensaje extraído del campo 'Body': '{incoming_msg}'")
-
-    # Iniciar el procesamiento de Gemini en un hilo separado (segundo plano)
-    if from_number: # Procesamos incluso si el mensaje está vacío para ver el error
+    # Iniciamos el procesamiento en segundo plano, pasando los datos de depuración
+    if from_number:
         thread = threading.Thread(
             target=process_and_reply,
-            args=(incoming_msg, from_number)
+            args=(incoming_msg, from_number, debug_string)
         )
         thread.start()
 
-    # Responder a Twilio INMEDIATAMENTE para evitar el timeout
+    # Respondemos a Twilio inmediatamente
     twiml = MessagingResponse()
     twiml.message("Procesando tu solicitud... 🤔")
     

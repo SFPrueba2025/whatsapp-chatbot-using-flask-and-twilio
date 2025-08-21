@@ -44,7 +44,8 @@ def chat_with_gemini(message: str) -> str:
     if not model:
         return "Error: El modelo de IA no está disponible."
     if not message.strip():
-        return "Por favor, envía un mensaje válido."
+        # Esta es la respuesta que estás recibiendo ahora
+        return "Por favor, envíame una pregunta o algo de contexto. Necesito algo para poder responder."
     try:
         response = model.generate_content(message)
         return response.text
@@ -82,14 +83,18 @@ def whatsapp_webhook():
     Recibe el mensaje de Twilio, responde inmediatamente
     y lanza el procesamiento de Gemini en segundo plano.
     """
+    # ====================================================================
+    # LÍNEA DE DIAGNÓSTICO AÑADIDA: Imprime todos los datos de Twilio
+    logging.info(f"Datos completos recibidos de Twilio: {request.values.to_dict()}")
+    # ====================================================================
+
     incoming_msg = request.values.get("Body", "").strip()
     from_number = request.values.get("From", "") # Número del usuario
     
-    logging.info(f"Mensaje recibido de {from_number}: {incoming_msg}")
+    logging.info(f"Mensaje extraído del campo 'Body': '{incoming_msg}'")
 
     # Iniciar el procesamiento de Gemini en un hilo separado (segundo plano)
-    # para no hacer esperar a Twilio.
-    if incoming_msg and from_number:
+    if from_number: # Procesamos incluso si el mensaje está vacío para ver el error
         thread = threading.Thread(
             target=process_and_reply,
             args=(incoming_msg, from_number)

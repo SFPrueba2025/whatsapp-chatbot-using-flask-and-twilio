@@ -84,8 +84,8 @@ def whatsapp_webhook():
     y lanza el procesamiento de Gemini en segundo plano.
     """
     # ====================================================================
-    # LÍNEA DE DIAGNÓSTICO AÑADIDA: Imprime todos los datos de Twilio
-    logging.info(f"Datos completos recibidos de Twilio: {request.values.to_dict()}")
+    # LÍNEA DE DIAGNÓSTICO CAMBIADA A ERROR PARA FORZAR SU APARICIÓN
+    logging.error(f"Datos completos recibidos de Twilio: {request.values.to_dict()}")
     # ====================================================================
 
     incoming_msg = request.values.get("Body", "").strip()

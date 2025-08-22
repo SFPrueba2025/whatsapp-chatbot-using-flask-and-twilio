@@ -55,9 +55,28 @@ def chat_with_gemini(message: str) -> str:
         logging.error(f"❌ Error al generar contenido con Gemini: {e}")
         return "Lo siento, ocurrió un error al procesar tu mensaje."
 
+def split_message(text: str, chunk_size: int = 1500) -> list:
+    """Divide un texto largo en trozos más pequeños."""
+    if len(text) <= chunk_size:
+        return [text]
+    
+    chunks = []
+    while len(text) > 0:
+        if len(text) > chunk_size:
+            split_point = text.rfind(' ', 0, chunk_size)
+            if split_point == -1:  # No se encontraron espacios, forzar corte
+                split_point = chunk_size
+        else:
+            split_point = len(text)
+            
+        chunks.append(text[:split_point])
+        text = text[split_point:].lstrip()
+    return chunks
+
 def process_and_reply(data: dict):
     """
     Función en segundo plano para procesar con Gemini y enviar la respuesta final.
+    Si la respuesta es muy larga, la divide en varios mensajes.
     """
     from_number = data.get("From")
     incoming_msg = get_message_body(data)
@@ -66,18 +85,23 @@ def process_and_reply(data: dict):
     
     reply_text = chat_with_gemini(incoming_msg)
     
-    # NUEVA LÓGICA: Acortar el mensaje si es demasiado largo
-    if len(reply_text) > 1590:
-        reply_text = reply_text[:1590] + "\n\n[Respuesta acortada por límite de caracteres]"
-
     if twilio_client and from_number:
         try:
-            twilio_client.messages.create(
-                body=reply_text,
-                from_=TWILIO_WHATSAPP_NUMBER,
-                to=from_number
-            )
-            logging.info(f"Respuesta final enviada a {from_number}")
+            # Dividir el mensaje en trozos si es necesario
+            message_chunks = split_message(reply_text)
+            
+            for i, chunk in enumerate(message_chunks):
+                # Añadir un indicador si hay múltiples partes (ej: 1/3)
+                part_indicator = f"({i+1}/{len(message_chunks)}) " if len(message_chunks) > 1 else ""
+                
+                twilio_client.messages.create(
+                    body=part_indicator + chunk,
+                    from_=TWILIO_WHATSAPP_NUMBER,
+                    to=from_number
+                )
+            
+            logging.info(f"Respuesta final de {len(message_chunks)} parte(s) enviada a {from_number}")
+
         except Exception as e:
             logging.error(f"❌ Error enviando mensaje con la API de Twilio: {e}")
 
